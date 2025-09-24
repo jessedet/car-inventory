@@ -1,9 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import type { Car } from "@prisma/client"
 
 export default function Home() {
-  const [cars, setCars] = useState<any[]>([])
+const [cars, setCars] = useState<Car[]>([])
   const [make, setMake] = useState("")
   const [maxPrice, setMaxPrice] = useState("")
   const [sortBy, setSortBy] = useState("year")
@@ -19,7 +20,7 @@ export default function Home() {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        let sorted = [...data]
+        const sorted = [...data]
         if (sortBy === "year") {
           sorted.sort((a, b) => b.year - a.year)
         } else if (sortBy === "price") {
