@@ -9,8 +9,8 @@ export const carSchema = z.object({
 })
 
 export const querySchema = z.object({
-  make: z.string().max(50).optional(),
-  maxPrice: z.string().optional()
+  make: z.string().max(50).optional().nullable(),
+  maxPrice: z.string().optional().nullable()
 })
 
 export type CarInput = z.infer<typeof carSchema>

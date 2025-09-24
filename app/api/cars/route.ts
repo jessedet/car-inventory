@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
-import { carSchema, querySchema } from "@/lib/validation"
+import { carSchema } from "@/lib/validation"
 import { createRateLimit } from "@/lib/rate-limit"
 
 // ✅ Prevents too many connections in Vercel serverless
@@ -24,33 +24,17 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Input validation
+    // Get query parameters
     const { searchParams } = new URL(request.url)
     const make = searchParams.get("make")
     const maxPrice = searchParams.get("maxPrice")
     
     console.log("Query params:", { make, maxPrice })
 
-    const validationResult = querySchema.safeParse({
-      make,
-      maxPrice
-    })
-
-    if (!validationResult.success) {
-      console.log("Validation failed:", validationResult.error.errors)
-      return NextResponse.json(
-        { error: "Invalid query parameters", details: validationResult.error.errors },
-        { status: 400 }
-      )
-    }
-
-    const validatedParams = validationResult.data
-    console.log("Validated params:", validatedParams)
-
     const cars = await prisma.car.findMany({
       where: {
-        ...(validatedParams.make ? { make: { equals: validatedParams.make, mode: "insensitive" as const } } : {}),
-        ...(validatedParams.maxPrice ? { price: { lte: Number(validatedParams.maxPrice) } } : {}),
+        ...(make ? { make: { equals: make, mode: "insensitive" as const } } : {}),
+        ...(maxPrice ? { price: { lte: Number(maxPrice) } } : {}),
       },
       orderBy: { year: "desc" },
     })
