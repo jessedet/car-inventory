@@ -98,13 +98,23 @@ export default function Home() {
               Please sign in to access the inventory system
             </p>
           </div>
-          <div className="text-center">
-            <a
-              href="/auth/signin"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Sign In
-            </a>
+          <div className="space-y-4">
+            <div className="text-center">
+              <a
+                href="/auth/signin"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Sign In
+              </a>
+            </div>
+            <div className="text-center">
+              <a
+                href="/auth/register"
+                className="text-sm text-indigo-600 hover:text-indigo-500"
+              >
+                Create New Account
+              </a>
+            </div>
           </div>
         </div>
       </div>

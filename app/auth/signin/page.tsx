@@ -100,6 +100,18 @@ export default function SignIn() {
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </div>
+
+          <div className="text-center">
+            <p className="text-sm text-gray-600">
+              Don&apos;t have an account?{" "}
+              <a 
+                href="/auth/register" 
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Create one here
+              </a>
+            </p>
+          </div>
         </form>
       </div>
     </div>
