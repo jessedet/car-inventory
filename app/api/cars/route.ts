@@ -96,3 +96,108 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+export async function PUT(request: NextRequest) {
+  try {
+    // Rate limiting
+    const rateLimitCheck = await createRateLimit(request)
+    if (!rateLimitCheck) {
+      return NextResponse.json(
+        { error: "Too many requests" },
+        { status: 429 }
+      )
+    }
+
+    const body = await request.json()
+    const { id, ...updateData } = body
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Car ID is required" },
+        { status: 400 }
+      )
+    }
+
+    // Input validation
+    const validationResult = carSchema.safeParse({
+      make: updateData.make,
+      model: updateData.model,
+      year: Number(updateData.year),
+      price: Number(updateData.price),
+      quantity: Number(updateData.quantity),
+    })
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Invalid input data", details: validationResult.error.errors },
+        { status: 400 }
+      )
+    }
+
+    const validatedData = validationResult.data
+
+    const updatedCar = await prisma.car.update({
+      where: { id },
+      data: validatedData,
+    })
+
+    return NextResponse.json(updatedCar)
+  } catch (error) {
+    console.error("PUT /api/cars error:", error)
+
+    if (error instanceof Error && error.message.includes("Record to update not found")) {
+      return NextResponse.json(
+        { error: "Car not found" },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    // Rate limiting
+    const rateLimitCheck = await createRateLimit(request)
+    if (!rateLimitCheck) {
+      return NextResponse.json(
+        { error: "Too many requests" },
+        { status: 429 }
+      )
+    }
+
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get("id")
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Car ID is required" },
+        { status: 400 }
+      )
+    }
+
+    await prisma.car.delete({
+      where: { id },
+    })
+
+    return NextResponse.json({ message: "Car deleted successfully" })
+  } catch (error) {
+    console.error("DELETE /api/cars error:", error)
+
+    if (error instanceof Error && error.message.includes("Record to delete does not exist")) {
+      return NextResponse.json(
+        { error: "Car not found" },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    )
+  }
+}
