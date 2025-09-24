@@ -10,7 +10,7 @@ export const carSchema = z.object({
 
 export const querySchema = z.object({
   make: z.string().max(50).optional(),
-  maxPrice: z.string().regex(/^\d+(\.\d+)?$/, "Invalid price format").optional()
+  maxPrice: z.string().optional()
 })
 
 export type CarInput = z.infer<typeof carSchema>

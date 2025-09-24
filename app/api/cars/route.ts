@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
-import { requireAuth } from "@/lib/auth"
 import { carSchema, querySchema } from "@/lib/validation"
 import { createRateLimit } from "@/lib/rate-limit"
 
@@ -13,9 +12,12 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
 export async function GET(request: NextRequest) {
   try {
+    console.log("GET /api/cars - Starting request")
+    
     // Rate limiting
     const rateLimitCheck = await createRateLimit(request)
     if (!rateLimitCheck) {
+      console.log("Rate limit exceeded")
       return NextResponse.json(
         { error: "Too many requests" },
         { status: 429 }
@@ -24,28 +26,36 @@ export async function GET(request: NextRequest) {
 
     // Input validation
     const { searchParams } = new URL(request.url)
+    const make = searchParams.get("make")
+    const maxPrice = searchParams.get("maxPrice")
+    
+    console.log("Query params:", { make, maxPrice })
+
     const validationResult = querySchema.safeParse({
-      make: searchParams.get("make"),
-      maxPrice: searchParams.get("maxPrice")
+      make,
+      maxPrice
     })
 
     if (!validationResult.success) {
+      console.log("Validation failed:", validationResult.error.errors)
       return NextResponse.json(
         { error: "Invalid query parameters", details: validationResult.error.errors },
         { status: 400 }
       )
     }
 
-    const { make, maxPrice } = validationResult.data
+    const validatedParams = validationResult.data
+    console.log("Validated params:", validatedParams)
 
     const cars = await prisma.car.findMany({
       where: {
-        ...(make ? { make: { equals: make, mode: "insensitive" as const } } : {}),
-        ...(maxPrice ? { price: { lte: Number(maxPrice) } } : {}),
+        ...(validatedParams.make ? { make: { equals: validatedParams.make, mode: "insensitive" as const } } : {}),
+        ...(validatedParams.maxPrice ? { price: { lte: Number(validatedParams.maxPrice) } } : {}),
       },
       orderBy: { year: "desc" },
     })
 
+    console.log(`Found ${cars.length} cars`)
     return NextResponse.json(cars)
   } catch (error) {
     console.error("GET /api/cars error:", error)
@@ -58,9 +68,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Authentication required for POST
-    await requireAuth(request)
-
     // Rate limiting
     const rateLimitCheck = await createRateLimit(request)
     if (!rateLimitCheck) {
@@ -98,13 +105,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(car, { status: 201 })
   } catch (error) {
     console.error("POST /api/cars error:", error)
-    
-    if (error instanceof Error && error.message === "Authentication required") {
-      return NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 }
-      )
-    }
 
     return NextResponse.json(
       { error: "Internal server error" },

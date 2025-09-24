@@ -1,14 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useSession, signOut } from "next-auth/react"
 import type { Prisma } from "@prisma/client"
 
 // ✅ Prisma-safe type for Car (fixed lint issue)
 type Car = Prisma.CarGetPayload<true>
 
 export default function Home() {
-  const { data: session, status } = useSession()
   const [cars, setCars] = useState<Car[]>([])
   const [make, setMake] = useState("")
   const [maxPrice, setMaxPrice] = useState("")
@@ -33,18 +31,30 @@ export default function Home() {
     if (params.toString()) url += `?${params.toString()}`
 
     fetch(url)
-      .then((res) => res.json())
-      .then((data: Car[]) => {
-        const sorted = [...data]
-        if (sortBy === "year") {
-          sorted.sort((a, b) => b.year - a.year)
-        } else if (sortBy === "price") {
-          sorted.sort((a, b) => a.price - b.price)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`)
         }
-        setCars(sorted)
+        return res.json()
+      })
+      .then((data) => {
+        // Check if data is an array
+        if (Array.isArray(data)) {
+          const sorted = [...data]
+          if (sortBy === "year") {
+            sorted.sort((a, b) => b.year - a.year)
+          } else if (sortBy === "price") {
+            sorted.sort((a, b) => a.price - b.price)
+          }
+          setCars(sorted)
+        } else {
+          console.error("API returned non-array data:", data)
+          setCars([])
+        }
       })
       .catch((error) => {
         console.error("Error fetching cars:", error)
+        setCars([])
       })
   }, [make, maxPrice, sortBy])
 
@@ -78,64 +88,16 @@ export default function Home() {
     }
   }
 
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
-    )
-  }
-
-  if (!session) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Welcome to Car Inventory
-            </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
-              Please sign in to access the inventory system
-            </p>
-          </div>
-          <div className="space-y-4">
-            <div className="text-center">
-              <a
-                href="/auth/signin"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Sign In
-              </a>
-            </div>
-            <div className="text-center">
-              <a
-                href="/auth/register"
-                className="text-sm text-indigo-600 hover:text-indigo-500"
-              >
-                Create New Account
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-10">
-      {/* Header with user info and sign out */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold text-gray-900">
           🚗 Dealership Inventory
         </h1>
-        <div className="flex items-center gap-4">
-          <span className="text-gray-600">Welcome, {session.user?.name || session.user?.email}</span>
-          <button
-            onClick={() => signOut()}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm"
-          >
-            Sign Out
-          </button>
+        <div className="text-gray-600">
+          Open Car Inventory System
         </div>
       </div>
 
