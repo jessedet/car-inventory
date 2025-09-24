@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server"
 import { PrismaClient } from "@prisma/client"
 
-const prisma = new PrismaClient()
+// ✅ Prevents too many connections in Vercel serverless
+const globalForPrisma = global as unknown as { prisma: PrismaClient }
+export const prisma =
+  globalForPrisma.prisma || new PrismaClient()
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -10,9 +15,10 @@ export async function GET(request: Request) {
 
   const cars = await prisma.car.findMany({
     where: {
-      ...(make ? { make: { equals: make, mode: "insensitive" } } : {}),
-      ...(maxPrice ? { price: { lte: Number(maxPrice) } } : {})
-    }
+      ...(make ? { make: { equals: make, mode: "insensitive" as const } } : {}),
+      ...(maxPrice ? { price: { lte: Number(maxPrice) } } : {}),
+    },
+    orderBy: { year: "desc" }, // ✅ default sorting on server
   })
 
   return NextResponse.json(cars)

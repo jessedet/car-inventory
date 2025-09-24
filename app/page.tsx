@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import type { Car } from "@prisma/client"
 
 export default function Home() {
-const [cars, setCars] = useState<Car[]>([])
+  const [cars, setCars] = useState<Car[]>([])
   const [make, setMake] = useState("")
   const [maxPrice, setMaxPrice] = useState("")
   const [sortBy, setSortBy] = useState("year")
@@ -19,8 +19,8 @@ const [cars, setCars] = useState<Car[]>([])
 
     fetch(url)
       .then((res) => res.json())
-      .then((data) => {
-        const sorted = [...data]
+      .then((data: Car[]) => {
+        const sorted = [...data] // ✅ const instead of let
         if (sortBy === "year") {
           sorted.sort((a, b) => b.year - a.year)
         } else if (sortBy === "price") {
@@ -32,12 +32,11 @@ const [cars, setCars] = useState<Car[]>([])
 
   return (
     <div className="min-h-screen bg-gray-50 p-10">
-      {/* 🔥 Heading visible */}
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-900">
         🚗 Dealership Inventory
       </h1>
 
-      {/* 🔥 Filters visible */}
+      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6 justify-center">
         <select
           value={make}
@@ -73,7 +72,7 @@ const [cars, setCars] = useState<Car[]>([])
         </select>
       </div>
 
-      {/* Inventory Table */}
+      {/* Table */}
       {cars.length === 0 ? (
         <p className="text-center text-gray-600">No cars found.</p>
       ) : (
