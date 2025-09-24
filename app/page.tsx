@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react"
 import type { Prisma } from "@prisma/client"
 
-// ✅ Prisma-safe type for Car
-type Car = Prisma.CarGetPayload<{}>
+// ✅ Prisma-safe type for Car (fixed lint issue)
+type Car = Prisma.CarGetPayload<true>
 
 export default function Home() {
   const [cars, setCars] = useState<Car[]>([])
