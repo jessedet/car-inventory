@@ -17,23 +17,35 @@ export default function SignIn() {
     setError("")
 
     try {
+      console.log("Attempting sign in...")
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
       })
 
+      console.log("Sign in result:", result)
+      
       if (result?.error) {
-        setError("Invalid credentials")
-      } else {
+        console.error("Sign in error:", result.error)
+        setError(`Sign in failed: ${result.error}`)
+      } else if (result?.ok) {
+        console.log("Sign in successful, checking session...")
         // Check if user is authenticated
         const session = await getSession()
+        console.log("Session:", session)
         if (session) {
+          console.log("Redirecting to home page...")
           router.push("/")
+        } else {
+          setError("Authentication successful but session not found")
         }
+      } else {
+        setError("Unexpected response from server")
       }
-    } catch {
-      setError("An error occurred during sign in")
+    } catch (error) {
+      console.error("Sign in exception:", error)
+      setError(`An error occurred: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
@@ -67,7 +79,8 @@ export default function SignIn() {
                 type="email"
                 autoComplete="email"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm bg-white"
+                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-black rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm bg-white"
+                style={{ color: '#000000' }}
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -83,7 +96,8 @@ export default function SignIn() {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm bg-white"
+                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-black rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm bg-white"
+                style={{ color: '#000000' }}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

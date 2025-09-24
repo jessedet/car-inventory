@@ -168,7 +168,7 @@ export default function Home() {
                 required
                 value={newCar.make}
                 onChange={(e) => setNewCar({ ...newCar, make: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
               />
             </div>
             <div>
@@ -180,7 +180,7 @@ export default function Home() {
                 required
                 value={newCar.model}
                 onChange={(e) => setNewCar({ ...newCar, model: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
               />
             </div>
             <div>
@@ -192,7 +192,7 @@ export default function Home() {
                 required
                 value={newCar.year}
                 onChange={(e) => setNewCar({ ...newCar, year: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
               />
             </div>
             <div>
@@ -204,7 +204,7 @@ export default function Home() {
                 required
                 value={newCar.price}
                 onChange={(e) => setNewCar({ ...newCar, price: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
               />
             </div>
             <div>
@@ -216,7 +216,7 @@ export default function Home() {
                 required
                 value={newCar.quantity}
                 onChange={(e) => setNewCar({ ...newCar, quantity: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
               />
             </div>
             <button
@@ -253,7 +253,7 @@ export default function Home() {
           placeholder="Max Price"
           value={maxPrice}
           onChange={(e) => setMaxPrice(e.target.value)}
-          className="border border-gray-400 px-3 py-2 rounded-md text-gray-900 placeholder-gray-500 bg-white"
+          className="border border-gray-400 px-3 py-2 rounded-md text-black placeholder-gray-500 bg-white"
         />
 
         <select

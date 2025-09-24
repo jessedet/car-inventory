@@ -96,7 +96,8 @@ export default function Register() {
                 name="name"
                 type="text"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 bg-white"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black bg-white"
+                style={{ color: '#000000' }}
                 placeholder="Enter your full name"
                 value={formData.name}
                 onChange={handleChange}
@@ -113,7 +114,8 @@ export default function Register() {
                 type="email"
                 autoComplete="email"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 bg-white"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black bg-white"
+                style={{ color: '#000000' }}
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
@@ -130,7 +132,8 @@ export default function Register() {
                 type="password"
                 autoComplete="new-password"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 bg-white"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black bg-white"
+                style={{ color: '#000000' }}
                 placeholder="Create a password"
                 value={formData.password}
                 onChange={handleChange}
@@ -147,7 +150,8 @@ export default function Register() {
                 type="password"
                 autoComplete="new-password"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 bg-white"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black bg-white"
+                style={{ color: '#000000' }}
                 placeholder="Confirm your password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
