@@ -1,7 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import type { Car } from "@prisma/client"
+import type { Prisma } from "@prisma/client"
+
+// ✅ Prisma-safe type for Car
+type Car = Prisma.CarGetPayload<{}>
 
 export default function Home() {
   const [cars, setCars] = useState<Car[]>([])
@@ -20,7 +23,7 @@ export default function Home() {
     fetch(url)
       .then((res) => res.json())
       .then((data: Car[]) => {
-        const sorted = [...data] // ✅ const instead of let
+        const sorted = [...data]
         if (sortBy === "year") {
           sorted.sort((a, b) => b.year - a.year)
         } else if (sortBy === "price") {
