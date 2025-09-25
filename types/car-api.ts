@@ -123,7 +123,7 @@ export const carInventoryFunctionSchema = {
 export class CarInventoryAPI {
   private baseUrl: string;
 
-  constructor(baseUrl: string = 'http://localhost:3000/api') {
+  constructor(baseUrl: string = 'https://car-inventory-black.vercel.app/api') {
     this.baseUrl = baseUrl;
   }
 

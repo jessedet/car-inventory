@@ -10,16 +10,14 @@ export async function GET() {
     console.log("Database connected successfully")
     
     // Test query
-    const userCount = await prisma.user.count()
     const carCount = await prisma.car.count()
     
-    console.log(`Found ${userCount} users and ${carCount} cars`)
+    console.log(`Found ${carCount} cars`)
     
     return NextResponse.json({
       success: true,
       message: "Database connection successful",
       data: {
-        userCount,
         carCount,
         timestamp: new Date().toISOString()
       }
