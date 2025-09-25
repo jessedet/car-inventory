@@ -1,0 +1,401 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Car Inventory API",
+    "description": "Complete car inventory API with CRUD operations - no authentication required",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://car-inventory-black.vercel.app"
+    }
+  ],
+  "paths": {
+    "/api/cars": {
+      "get": {
+        "summary": "Get cars",
+        "description": "Retrieve cars from inventory with optional filtering",
+        "operationId": "getCars",
+        "parameters": [
+          {
+            "name": "make",
+            "in": "query",
+            "description": "Filter cars by manufacturer (e.g., Toyota, Honda, Ford)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "description": "Filter cars by maximum price",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of cars",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create car",
+        "description": "Add a new car to inventory",
+        "operationId": "createCar",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCarRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Car created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Car"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update car",
+        "description": "Update an existing car in inventory",
+        "operationId": "updateCar",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCarRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Car updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Car"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Car not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete car",
+        "description": "Remove a car from inventory",
+        "operationId": "deleteCar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Car ID to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Car deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Car ID is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Car not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Car": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique car identifier"
+          },
+          "make": {
+            "type": "string",
+            "description": "Car manufacturer"
+          },
+          "model": {
+            "type": "string",
+            "description": "Car model"
+          },
+          "year": {
+            "type": "integer",
+            "description": "Car year"
+          },
+          "price": {
+            "type": "number",
+            "description": "Car price in USD"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Available quantity"
+          }
+        },
+        "required": ["id", "make", "model", "year", "price", "quantity"]
+      },
+      "CreateCarRequest": {
+        "type": "object",
+        "properties": {
+          "make": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "description": "Car manufacturer (required)"
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "description": "Car model (required)"
+          },
+          "year": {
+            "type": "integer",
+            "minimum": 1900,
+            "maximum": 2025,
+            "description": "Car year (required)"
+          },
+          "price": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 1000000,
+            "description": "Car price in USD (required)"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000,
+            "description": "Available quantity (required)"
+          }
+        },
+        "required": ["make", "model", "year", "price", "quantity"]
+      },
+      "UpdateCarRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Car ID to update (required)"
+          },
+          "make": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "description": "Car manufacturer (required)"
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "description": "Car model (required)"
+          },
+          "year": {
+            "type": "integer",
+            "minimum": 1900,
+            "maximum": 2025,
+            "description": "Car year (required)"
+          },
+          "price": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 1000000,
+            "description": "Car price in USD (required)"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000,
+            "description": "Available quantity (required)"
+          }
+        },
+        "required": ["id", "make", "model", "year", "price", "quantity"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Additional error details"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Car Inventory API",
+    "description": "Simple car inventory API - no authentication required",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://car-inventory-black.vercel.app"
+    }
+  ],
+  "paths": {
+    "/api/cars": {
+      "get": {
+        "summary": "Get all cars",
+        "operationId": "getCars",
+        "parameters": [
+          {
+            "name": "make",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of cars",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "make": {"type": "string"},
+                      "model": {"type": "string"},
+                      "year": {"type": "integer"},
+                      "price": {"type": "number"},
+                      "quantity": {"type": "integer"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
